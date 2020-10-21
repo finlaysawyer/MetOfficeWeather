@@ -1,15 +1,17 @@
 package training.metofficeweather.web;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
+import training.metofficeweather.Location;
+import training.metofficeweather.Root;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.util.List;
 
 public class WeatherInfo {
     private final String locationId;
+    private static final String API = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/sitelist?key=";
+    private static final Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 
     public WeatherInfo(String locationId) {
         this.locationId = locationId;
@@ -19,13 +21,18 @@ public class WeatherInfo {
         return locationId;
     }
 
-    public String getMetOfficeData(String locationId) throws IOException {
-        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
-        String data = client.target("http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/"
-                + locationId + "?res=3hourly&key=KEY")
+    public static String getLocationInfo(String locationId) {
+        Root root = client.target(API)
                 .request(MediaType.APPLICATION_JSON)
-                .get(String.class);
+                .get(Root.class);
 
-        return data;
+        Location[] locations = root.getLocations().getLocation();
+
+        for (Location location : locations) {
+            if (location.getId().equals(locationId)) {
+                return location.getName() + " " + location.getRegion();
+            }
+        }
+        return null;
     }
 }
