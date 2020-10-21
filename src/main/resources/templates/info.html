@@ -10,9 +10,9 @@
     </head>
     <body>
         <div layout:fragment="content" class="container body-content">
-            <h2>Weather Information</h2>
+            <h2>Weather Information for <span th:text="${weatherInfo.getMetOfficeData(weatherInfo.locationId)}"></span></h2>
             <div>
-                <p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>
+                <p>You entered location id <span th:text="${weatherInfo.getMetOfficeData(weatherInfo.locationId)}"></span></p>
             </div>
         </div>
     </body>
