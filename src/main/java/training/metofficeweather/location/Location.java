@@ -1,4 +1,4 @@
-package training.metofficeweather;
+package training.metofficeweather.location;
 
 public class Location {
     private String elevation;
