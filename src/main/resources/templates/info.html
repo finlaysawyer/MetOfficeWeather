@@ -9,24 +9,36 @@
         <title>Weather Information</title>
     </head>
     <body>
-        <div layout:fragment="content" class="container-fluid body-content">
-            <h2>Weather Information for <span th:text="${weatherInfo.getLocationInfo(weatherInfo.locationId)}"></span></h2>
+        <div layout:fragment="content" class="container-flex body-content">
+            <h2 class="text-center">Weather Information for <span th:text="${weatherInfo.getLocationInfo(weatherInfo.locationId)}"></span></h2>
             <div>
                 <!--<p>You entered location id <span th:text="${weatherInfo.locationId}"></span></p>-->
                 <!--<h3><span th:utext="${weatherInfo.getWeatherForecast(weatherInfo.locationId)}"></span></h3>-->
-                <div class="container-fluid">
+                <div class="container-flex" style="padding-left: 10%; padding-right: 10%;">
                     <div class="row">
-                        <div th:each="i : ${weatherInfo.getWeatherForecast(weatherInfo.locationId)}">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div th:utext="${i}"><p class="card-text"></p></div>
+                        <div th:each="day: ${weatherInfo.getWeatherForecast(weatherInfo.locationId)}">
+                            <!--<div th:each="forecast: ${weatherInfo.getWeatherForecast(weatherInfo.locationId)}">-->
+                            <div class="col-lg-2">
+                                <div class="card" style="width: 18rem; padding: 2%;" >
+                                    <img class="card-img-top" src="https://images.pexels.com/photos/531756/pexels-photo-531756.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center" th:utext="${day[0]}"></h5>
+                                        <p class="card-text" th:utext="${day[1]}"></p>
+                                        <p class="card-text" th:utext="${day[2]}"></p>
+                                        <p class="card-text" th:utext="${day[3]}"></p>
+                                        <p class="card-text" th:utext="${day[4]}"></p>
+                                        <p class="card-text" th:utext="${day[5]}"></p>
+                                        <p class="card-text" th:utext="${day[6]}"></p>
+                                    </div>
                                 </div>
                             </div>
-                            <br>
+                            <!--</div>
+                            <div th:each="forecast: ${weatherInfo.getWeatherForecast(weatherInfo.locationId)}">
+                                <p th:utext="${forecast[1]}"></p>
+                            </div>-->
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </body>

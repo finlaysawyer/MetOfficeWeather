@@ -44,7 +44,7 @@ public class WeatherInfo {
         return null;
     }
 
-    public static List<String> getWeatherForecast(String locationId) {
+    public static List<List<String>> getWeatherForecast(String locationId) {
         String data = client.target(API_HOURLY + locationId + API_HOURLY_ARGS)
                 .request(MediaType.APPLICATION_JSON)
                 .get(String.class);
@@ -56,31 +56,35 @@ public class WeatherInfo {
                 .getAsJsonObject().get("Location")
                 .getAsJsonObject().get("Period").getAsJsonArray();
 
-        List<String> forecastList = new ArrayList<>();
+        List<List<String>> forecastDays = new ArrayList<>();
 
         for (JsonElement e : dataArray) {
             int hour = 0;
             JsonArray hourlyForecast = e.getAsJsonObject().get("Rep").getAsJsonArray();
-            String date = e.getAsJsonObject().get("value").getAsString().replace("Z", "");
+
+            List<String> forecastList = new ArrayList<>();
+            forecastList.add(e.getAsJsonObject().get("value").getAsString().replace("Z", ""));
 
             for (JsonElement element : hourlyForecast) {
                 JsonObject day = element.getAsJsonObject();
                 forecastList.add(
-                        "<strong>" + date + " | " +Integer.toString(hour)+ ":00</strong>" +
-                        "<br>Feels Like: " + day.get("F").getAsString() + "°C" +
-                        "<br>Wind Gust: " + day.get("G").getAsString() +
-                        "<br>Relative Humidity - " + day.get("H").getAsString() +
-                        "<br>Temperature: " + day.get("T").getAsString() + "°C" +
-                        "<br>Visibility: " + day.get("V").getAsString() +
-                        "<br>Wind Direction: " + day.get("D").getAsString() +
-                        "<br>Wind Speed: " + day.get("S").getAsString() +
-                        "<br>Max UV: " + day.get("U").getAsString() +
-                        "<br>Weather Type: " + day.get("W").getAsString() +
-                        "<br>Precipitation Probability: " + day.get("Pp").getAsString()
+                        "<strong>" + Integer.toString(hour)+ ":00</strong>" +
+                        "<br><i class=\"fas fa-temperature-high\"></i>&nbsp; Feels Like: " + day.get("F").getAsString() + "°C" +
+                        "<br><i class=\"fas fa-temperature-low\"></i>&nbsp; Temperature: " + day.get("T").getAsString() + "°C" +
+                        "<br><i class=\"fas fa-tint\"></i>&nbsp;&nbsp; Relative Humidity - " + day.get("H").getAsString() +
+                        "<br><i class=\"fas fa-glasses\"></i>&nbsp; Visibility: " + day.get("V").getAsString() +
+                        "<br><i class=\"fas fa-wind\"></i>&nbsp; Wind Gust: " + day.get("G").getAsString() +
+                        "<br><i class=\"fas fa-wind\"></i>&nbsp; Wind Direction: " + day.get("D").getAsString() +
+                        "<br><i class=\"fas fa-wind\"></i>&nbsp; Wind Speed: " + day.get("S").getAsString() +
+                        "<br><i class=\"fas fa-sun\"></i>&nbsp; Max UV: " + day.get("U").getAsString() +
+                        "<br><i class=\"fas fa-cloud\"></i>&nbsp; Weather Type: " + day.get("W").getAsString() +
+                        "<br><i class=\"fas fa-cloud-showers-heavy\"></i>&nbsp; Precipitation Probability: " + day.get("Pp").getAsString()
                 );
                 hour += 3;
             }
+
+            forecastDays.add(forecastList);
         }
-        return forecastList;
+        return forecastDays;
     }
 }
